@@ -1,0 +1,52 @@
+services:
+  postgres:
+    build:
+      context: ./
+      dockerfile: ./docker/postgres/Dockerfile
+    image: ospira-myapp-postgres
+    container_name: myappPostgres
+    restart: always
+    shm_size: 256mb
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: tmpfs
+        target: /dev/shm
+        tmpfs:
+          size: 268435456 # 256*2^20 bytes = 256Mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: django
+  django:
+    build:
+      context: ./
+      dockerfile: ./docker/django/Dockerfile
+    image: ospira-myapp-backend
+    container_name: myappBackend
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./django/:/django/
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+  react:
+    build:
+      context: ./
+      dockerfile: ./docker/react/Dockerfile
+    image: ospira-myapp-frontend
+    container_name: myappFrontend
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./react/:/react/
+      - /react/node_modules
+      - /react/.next
+    ports:
+      - 3000:3000
+    environment:
+      DJANGO_API: "http://myappBackend:8000"
