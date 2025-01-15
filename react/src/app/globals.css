@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+text.recharts-text {
+  font-size: 12px;
+}
+
+.recharts-xAxis .recharts-cartesian-axis-ticks text.recharts-text{
+  font-size: 9px;
+  transform: translateX(8px)
+}
+
+.recharts-brush text.recharts-text{
+  font-size: 8px;
+}
+
+.recharts-brush text.recharts-text:nth-child(1) {
+  transform: translate(33px, -18px)
+}
+
+.recharts-brush text.recharts-text:nth-child(2) {
+  transform: translate(-50px, -18px)
+}
